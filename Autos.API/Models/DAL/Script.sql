@@ -1,0 +1,12 @@
+﻿CREATE DATABASE dbAutos
+
+use dbAutos
+
+CREATE TABLE Autos
+(
+ Id INT IDENTITY(1,1) PRIMARY KEY,
+ Marca VARCHAR(30) NOT NULL,
+ Modelo VARCHAR(60) NOT NULL,
+ Precio decimal(6,2) NOT NULL,
+ Year INT NOT NULL
+)
