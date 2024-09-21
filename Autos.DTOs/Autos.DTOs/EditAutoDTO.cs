@@ -4,11 +4,13 @@ namespace Autos.DTOs.Autos.DTOs
 {
     public class EditAutoDTO
     {
+        //Contructor con parametros
         public EditAutoDTO(GetIdResultAuto get)
         {
             Id = get.Id;
         }
 
+        //Constructo vacio
         public EditAutoDTO()
         {
         }
