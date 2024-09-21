@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Autos.DTOs
 {
-    internal class CreateAutoDTO
+    public class CreateAutoDTO
     {
+
     }
 }
