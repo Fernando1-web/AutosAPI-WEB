@@ -1,39 +1,42 @@
-﻿namespace Autos.API.Models.DAL
+﻿using Autos.API.Models.EN;
+
+namespace Autos.API.Models.DAL
 {
     public class AutosDAL
     {
-        readonly CRMContext _context;
+        readonly AutosDBContext _context;
 
         //Constructor que interactua con base de datos
-        public CustomerDAL(CRMContext cRMContext)
+        public AutosDAL(AutosDBContext autosDBContext)
         {
-            _context = cRMContext;
+            _context = autosDBContext;
         }
 
         //Task:Crear
         public async Task<int> Create(Auto auto)
         {
-            _context.Add(customer);
+            _context.Add(auto);
             return await _context.SaveChangesAsync();
         }
 
         //Task: Obtener por Id
-        public async Task<Customer> GetById(int id)
+        public async Task<Auto> GetById(int id)
         {
-            var customer = await _context.Customers.FirstOrDefaultAsync(x => x.Id == id);
-            return customer != null ? customer : new Customer();
+            var auto = await _context.Autos.FirstOrDefaultAsync(x => x.Id == id);
+            return auto != null ? auto : new Auto();
         }
 
         //Task: Editar
-        public async Task<int> Edit(Customer customer)
+        public async Task<int> Edit(Auto auto)
         {
             int result = 0;
-            var customerUpdate = await GetById(customer.Id);
-            if (customerUpdate.Id != 0)
+            var autoUpdate = await GetById(auto.Id);
+            if (autoUpdate.Id != 0)
             {
-                customerUpdate.Name = customer.Name;
-                customerUpdate.LastName = customer.LastName;
-                customerUpdate.Address = customer.Address;
+                autoUpdate.Marca = auto.Marca;
+                autoUpdate.Modelo = auto.Modelo;
+                autoUpdate.Year = auto.Year;
+                autoUpdate.Precio = auto.Precio;
                 result = await _context.SaveChangesAsync();
             }
             return result;
@@ -43,37 +46,37 @@
         public async Task<int> Delete(int id)
         {
             int result = 0;
-            var customerDelete = await GetById(id);
-            if(customerDelete.Id > 0)
+            var autoDelete = await GetById(id);
+            if(autoDelete.Id > 0)
             {
-                _context.Customers.Remove(customerDelete);
+                _context.Autos.Remove(autoDelete);
                 result = await _context.SaveChangesAsync();
             }
             return result;
         }
 
         //Busqueda con filtro
-        private IQueryable<Customer> Query(Customer customer)
+        private IQueryable<Auto> Query(Auto auto)
         {
-            var query = _context.Customers.AsQueryable();
-            if (!string.IsNullOrWhiteSpace(customer.Name))
-                query = query.Where(s => s.Name == customer.Name);
-            if (!string.IsNullOrWhiteSpace(customer.LastName))
-                query = query.Where(s => s.LastName == customer.LastName);
+            var query = _context.Autos.AsQueryable();
+            if (!string.IsNullOrWhiteSpace(auto.Marca))
+                query = query.Where(s => s.Marca == auto.Marca);
+            if (!string.IsNullOrWhiteSpace(auto.Modelo))
+                query = query.Where(s => s.Modelo == auto.Modelo);
             return query;
         }
 
         //Contador 
-        public async Task<int> CountSearch(Customer customer)
+        public async Task<int> CountSearch(Auto auto)
         {
-            return await Query(customer).CountAsync();
+            return await Query(auto).CountAsync();
         }
 
         //Paginacion
-        public async Task<List<Customer>> Search(Customer customer, int take = 10, int skip = 0)
+        public async Task<List<Auto>> Search(Auto auto, int take = 10, int skip = 0)
         {
             take = take == 0 ? 10 : take;
-            var query = Query(customer);
+            var query = Query(auto);
             query = query.OrderByDescending(s => s.Id).Skip(skip).Take(take);
             return await query.ToListAsync();
         }
