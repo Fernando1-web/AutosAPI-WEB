@@ -1,3 +1,7 @@
+using Autos.API.Endpoints;
+using Autos.API.Models.DAL;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -5,7 +9,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddDbContext<AutosDBContext>(options =>
+options.UseSqlServer(builder.Configuration.GetConnectionString("Conn"))
+);
+
+builder.Services.AddScoped<AutosDAL>();
+
 var app = builder.Build();
+
+app.AddAutosEndpoints();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
