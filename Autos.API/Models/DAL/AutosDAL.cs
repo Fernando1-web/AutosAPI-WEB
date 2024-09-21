@@ -1,4 +1,5 @@
 ﻿using Autos.API.Models.EN;
+using Microsoft.EntityFrameworkCore;
 
 namespace Autos.API.Models.DAL
 {
