@@ -1,82 +1,89 @@
-﻿namespace Autos.API.Endpoints
+﻿using Autos.API.Models.DAL;
+using Autos.API.Models.EN;
+using Autos.DTOs.Autos.DTOs;
+
+namespace Autos.API.Endpoints
 {
     public static class AutosEndpoint
     {
         public static void AddAutosEndpoints(this WebApplication app)
         {
             //POST: Buscar todos
-            app.MapPost("/customer/search", async (SearchQueryCustomerDTO customerDTO, CustomerDAL customerDAL) =>
+            app.MapPost("/auto/search", async (SearchQueryAutoDTO autoDTO, AutosDAL autosDAL) =>
             {
-                var customer = new Customer
+                var auto1 = new Auto
                 {
-                    Name = customerDTO.Name_Like != null ? customerDTO.Name_Like : string.Empty,
-                    LastName = customerDTO.LastName_Like != null ? customerDTO.LastName_Like : string.Empty
+                    Marca = autoDTO.Marca_Like != null ? autoDTO.Marca_Like : string.Empty,
+                    Modelo = autoDTO.Modelo_Like != null ? autoDTO.Modelo_Like : string.Empty
                 };
 
-                var customers = new List<Customer>();
+                var autos = new List<Auto>();
                 int countRow = 0;
 
-                if (customerDTO.SendRowCount == 2)
+                if (autoDTO.SendRowCount == 2)
                 {
-                    customers = await customerDAL.Search(customer, skip: customerDTO.Skip, take: customerDTO.Take);
-                    if (customers.Count > 0)
-                        countRow = await customerDAL.CountSearch(customer);
+                    autos = await autosDAL.Search(auto1, skip: autoDTO.Skip, take: autoDTO.Take);
+                    if (autos.Count > 0)
+                        countRow = await autosDAL.CountSearch(auto1);
                 }
                 else
                 {
-                    customers = await customerDAL.Search(customer, skip: customerDTO.Skip, take: customerDTO.Take);
+                    autos = await autosDAL.Search(auto1, skip: autoDTO.Skip, take: autoDTO.Take);
                 }
 
-                var customerResult = new SearchResultCustomerDTO
+                var autoResult = new SearchResultAutoDTO
                 {
-                    Data = new List<SearchResultCustomerDTO.CustomerDTO>(),
+                    Data = new List<SearchResultAutoDTO.AutosDTO>(),
                     CountRow = countRow
                 };
 
-                customers.ForEach(s =>
+                autos.ForEach(s =>
                 {
-                    customerResult.Data.Add(new SearchResultCustomerDTO.CustomerDTO
+                    autoResult.Data.Add(new SearchResultAutoDTO.AutosDTO
                     {
                         Id = s.Id,
-                        Name = s.Name,
-                        LastName = s.LastName,
-                        Address = s.Address
+                        Marca = s.Marca,
+                        Modelo = s.Modelo,
+                        Year = s.Year,
+                        Precio = s.Precio
                     });
                 });
 
-                return customerResult;
+                return autoResult;
             });
 
             //GET: Obtener por ID
-            app.MapGet("/customer/{id}", async (int id, CustomerDAL customerDAL) =>
+            app.MapGet("/auto/{id}", async (int id, AutosDAL autosDAL) =>
             {
-                var customer = await customerDAL.GetById(id);
+                var auto = await autosDAL.GetById(id);
 
-                var customerResult = new GetIdResultCustomerDTO
+                var autoResult = new GetIdResultAuto
                 {
-                    Id = customer.Id,
-                    Name = customer.Name,
-                    LastName = customer.LastName,
-                    Address = customer.Address
+                    Id = auto.Id,
+                    Marca = auto.Marca,
+                    Modelo = auto.Modelo,
+                    Year = auto.Year,
+                    Precio = auto.Precio
                 };
 
-                if (customerResult.Id > 0)
-                    return Results.Ok(customerResult);
+                if (autoResult.Id > 0)
+                    return Results.Ok(autoResult);
                 else
-                    return Results.NotFound(customerResult);
+                    return Results.NotFound(autoResult);
             });
 
             //POST: Crear 
-            app.MapPost("/customer", async (CreateCustomerDTO customerDTO, CustomerDAL customerDAL) =>
+            app.MapPost("/auto", async (CreateAutoDTO autoDTO, AutosDAL autosDAL) =>
             {
-                var customer = new Customer
+                var autos = new Auto
                 {
-                    Name = customerDTO.Name,
-                    LastName = customerDTO.LastName,
-                    Address = customerDTO.Address
+                    Marca = autoDTO.Marca,
+                    Modelo = autoDTO.Modelo,
+                    Year = autoDTO.Year,
+                    Precio = autoDTO.Precio
                 };
 
-                int result = await customerDAL.Create(customer);
+                int result = await autosDAL.Create(autos);
                 if (result != 0)
                     return Results.Ok(result);
                 else
@@ -84,17 +91,18 @@
             });
 
             //PUT: Editar
-            app.MapPut("/customer", async (EditCustomerDTO customerDTO, CustomerDAL customerDAL) =>
+            app.MapPut("/auto", async (EditAutoDTO autoDTO, AutosDAL autosDAL) =>
             {
-                var customer = new Customer
+                var autos = new Auto
                 {
-                    Id = customerDTO.Id,
-                    Name = customerDTO.Name,
-                    LastName = customerDTO.LastName,
-                    Address = customerDTO.Address
+                    Id = autoDTO.Id,
+                    Marca = autoDTO.Marca,
+                    Modelo = autoDTO.Modelo,
+                    Year = autoDTO.Year,
+                    Precio = autoDTO.Precio
                 };
 
-                int result = await customerDAL.Edit(customer);
+                int result = await autosDAL.Edit(autos);
                 if (result != 0)
                     return Results.Ok(result);
                 else
@@ -102,9 +110,9 @@
             });
 
             //DELETE: Eliminar
-            app.MapDelete("/customer/{id}", async (int id, CustomerDAL customerDAL) =>
+            app.MapDelete("/auto/{id}", async (int id, AutosDAL autosDAL) =>
             {
-                int result = await customerDAL.Delete(id);
+                int result = await autosDAL.Delete(id);
                 if (result != 0)
                     return Results.Ok(result);
                 else
@@ -113,4 +121,4 @@
         }
     }
 }
-}
+
