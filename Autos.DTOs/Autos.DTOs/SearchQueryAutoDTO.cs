@@ -24,4 +24,3 @@ namespace Autos.DTOs.Autos.DTOs
         public byte SendRowCount { get; set; }
     }
 }
-}

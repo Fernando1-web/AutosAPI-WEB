@@ -9,8 +9,13 @@ namespace Autos.DTOs.Autos.DTOs
             Id = get.Id;
         }
 
+        public EditAutoDTO()
+        {
+        }
+
         [Required(ErrorMessage = "El campo {0} es obligatorio")]
         public int Id { get; set; }
+
         [Display(Name = "Marca")]
         [Required(ErrorMessage = "El campo {0} es requerido")]
         [MaxLength(30, ErrorMessage = "El campo {0} no puede tener mas de 30 caracteres")]
