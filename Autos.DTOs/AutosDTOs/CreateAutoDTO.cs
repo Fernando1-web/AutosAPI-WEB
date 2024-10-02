@@ -11,12 +11,12 @@ namespace Autos.DTOs.Autos.DTOs
 
         [Display(Name = "Modelo")]
         [Required(ErrorMessage = "El campo es obligatorio")]
-        [MaxLength(30, ErrorMessage = "El campo no puede contener mas de 60 caracteres")]
+        [MaxLength(60, ErrorMessage = "El campo no puede contener mas de 60 caracteres")]
         public string Modelo { get; set; }
 
         [Display(Name = "Año")]
         [Required(ErrorMessage = "El campo es obligatorio")]
-        [MaxLength(4, ErrorMessage = "El campo no puede contener mas de 4 caracteres")]
+        [Range(1,9999, ErrorMessage= "El año no puede tener mas de 4 digitos.")]
         public int Year { get; set; }
 
         [Display(Name = "Precio")]

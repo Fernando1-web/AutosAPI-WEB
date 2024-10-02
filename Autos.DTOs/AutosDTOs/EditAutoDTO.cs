@@ -8,6 +8,10 @@ namespace Autos.DTOs.Autos.DTOs
         public EditAutoDTO(GetIdResultAuto get)
         {
             Id = get.Id;
+            Marca = get.Marca;
+            Modelo = get.Modelo;
+            Year = get.Year;
+            Precio = get.Precio;
         }
 
         //Constructo vacio
@@ -29,7 +33,7 @@ namespace Autos.DTOs.Autos.DTOs
         public string Modelo { get; set; }
 
         [Display(Name = "Año")]
-        [MaxLength(4, ErrorMessage = "El campo {0} no puede tener mas de 4 caracteres")]
+        [Range(1, 9999, ErrorMessage = "El año no puede tener mas de 4 digitos.")]
         public int Year { get; set; }
 
         [Display(Name = "Precio")]
